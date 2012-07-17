@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>An HTML form with checkboxes</title>
+</head>
+<body>
+<form action="send_formchb.php" method="POST">
+<p><label>Name:</label><br/>
+<input type="text" name="user" /></p>
+<fieldset>
+<legend>Select Some Products:</legend><br/>
+<input type="checkbox" id="abc"
+		name="products[]" value="abc">
+	<label for="abc">ABC</label><br/>
+<input type="checkbox" id="def"
+    	name="products[]" value="def">
+	<label for="def">DEF</label><br/>
+<input type="checkbox" id="ghi"
+       name="products[]" value="ghi">
+        <label for="ghi">GHI</label>
+</fieldset>
+<button type="submit" name="submit" value="submit">Submit Form</button>
+</form>
+</body>
+</html>
