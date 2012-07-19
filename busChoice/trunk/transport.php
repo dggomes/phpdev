@@ -277,6 +277,12 @@ $waitTime = $nextBusWhenMin-$walkTime;
 
 <div id="writtencontent">
 
+<h1>Now is <?php echo date("H:i:s"); ?></h1>
+<h1>The Best Choice is <?php echo $bestChoice; ?></h1>
+<h1>The Next Bus will arrive in <?php echo $nextBusWhenMin; ?> minutes</h1> 
+<h1>You usually take <?php echo $walkTime; ?> minutes to arrive in the bus stop, so you will have to wait <?php echo $waitTime; ?>  minutes for the bus</h1>
+<h1>You should arrive in the office at  <?php echo $officeArrivalTime; ?></h1>
+
 <h1>Today</h1>
 <table border="1">
 <tr>
@@ -398,12 +404,6 @@ $waitTime = $nextBusWhenMin-$walkTime;
 <td><?php echo date('r', $bus153OfficeArrivalTime); ?></td>
 </tr>
 </table>
-
-<h1>Now is <?php echo date("H:i:s"); ?></h1>
-<h1>The Best Choice is <?php echo $bestChoice; ?></h1>
-<h1>The Next Bus will arrive in <?php echo $nextBusWhenMin; ?> minutes</h1> 
-<h1>You usually take <?php echo $walkTime; ?> minutes to arrive in the bus stop, so you will have to wait <?php echo $waitTime; ?>  minutes for the bus</h1>
-<h1>You should arrive in the office at  <?php echo $officeArrivalTime; ?></h1>
 
 <!--
 
