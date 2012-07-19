@@ -88,93 +88,85 @@ $predictions153[0][4] = $predictions153[0][4] / 1000;
 
 // BUS 17
 
-//echo "first prediction ".$predictions17[0][1]."<br>";
-//echo "arrival bus stop ".$arrivalatBusStopForBus17Epoch."<br>";
-
 if ($predictions17[0][1] > $arrivalatBusStopForBus17Epoch)
 {
 	     	$prediction17_valid1 = $predictions17[0][1];
-	     	//echo $prediction17_valid1." is a valid prediction"."<br>";
+	     	
 }
+
 else {
 $prediction17_valid1 = "0";
-//echo " the first is an invalid prediction"."<br>";
 }
 
 if ($predictions17[0][2] > $arrivalatBusStopForBus17Epoch)
 {
 	     	$prediction17_valid2 = $predictions17[0][2];
-	     	//echo $prediction17_valid2." is a valid prediction"."<br>";
 }
+
 else {
 $prediction17_valid2 = "0";
-//echo $prediction17_valid2." the second is an invalid prediction"."<br>";
 }
 
 if ($predictions17[0][3] > $arrivalatBusStopForBus17Epoch)
 {
 	     	$prediction17_valid3 = $predictions17[0][3];
-	     	//echo $prediction17_valid2." is a valid prediction"."<br>";
 }
+
 else {
 $prediction17_valid3 = "0";
-//echo $prediction17_valid2." the second is an invalid prediction"."<br>";
 }
 
 if ($predictions17[0][4] > $arrivalatBusStopForBus17Epoch)
 {
 	     	$prediction17_valid4 = $predictions17[0][4];
-	     	//echo $prediction17_valid2." is a valid prediction"."<br>";
+
 }
+
 else {
 $prediction17_valid4 = "0";
-//echo $prediction17_valid2." the second is an invalid prediction"."<br>";
 }
 
 
 // BUS 153
 
-//echo "first prediction153 ".$predictions153[0][1]."<br>";
-//echo "arrival bus stop153 ".$arrivalatBusStopForBus153Epoch."<br>";
-
 if ($predictions153[0][1] > $arrivalatBusStopForBus153Epoch)
 {
 	     	$prediction153_valid1 = $predictions153[0][1];
-	     	//echo $prediction153_valid1."valid prediction";
+
 }
 else {
 $prediction153_valid1 = "0";
-//echo "invalid prediction";
+
 }
 
 if ($predictions153[0][2] > $arrivalatBusStopForBus153Epoch)
 {
 	     	$prediction153_valid2 = $predictions153[0][2];
-	     	//echo $prediction153_valid2."valid prediction";
+
 }
 else {
 $prediction153_valid2 = "0";
-//echo $prediction153_valid2."invalid prediction";
+
 }
 
 if ($predictions153[0][3] > $arrivalatBusStopForBus153Epoch)
 {
 	     	$prediction153_valid3 = $predictions153[0][3];
-	     	//echo $prediction153_valid2."valid prediction";
+
 }
 else {
 $prediction153_valid3 = "0";
-//echo $prediction153_valid2."invalid prediction";
+
 }
 
 if ($predictions153[0][4] > $arrivalatBusStopForBus153Epoch)
 {
 	     	$prediction153_valid4 = $predictions153[0][4];
-	     	//echo $prediction153_valid2."valid prediction";
+
 }
 else {
 $prediction153_valid4 = "0";
-//echo $prediction153_valid2."invalid prediction";
+
 }
 
 //******************************************************************************
@@ -186,20 +178,20 @@ $prediction153_valid4 = "0";
 if (!($prediction17_valid1=="0"))
 {
 	     	$bus17EarliestArrivalTime = $prediction17_valid1;
-	     	//echo $prediction17_valid1."first one is the earliest";
+
 }
 elseif (!($prediction17_valid2=="0")){
 			$bus17EarliestArrivalTime = $prediction17_valid2;
-	     	//echo $prediction17_valid2."second one is the earliest";
+
 }
 
 elseif (!($prediction17_valid3=="0")){
 			$bus17EarliestArrivalTime = $prediction17_valid3;
-	     	//echo $prediction17_valid3."third one is the earliest";
+
 }
 else {
 			$bus17EarliestArrivalTime = $prediction17_valid4;
-	     	//echo $prediction17_valid4."fourth one is the earliest";
+
 }
 
 // BUS 153
@@ -207,20 +199,20 @@ else {
 if (!($prediction153_valid1=="0"))
 {
 	     	$bus153EarliestArrivalTime = $prediction153_valid1;
-	     	//echo $prediction153_valid1."first one is the earliest";
+
 }
 elseif (!($prediction153_valid2=="0")){
 			$bus153EarliestArrivalTime = $prediction153_valid2;
-	     	//echo $prediction153_valid2."second one is the earliest";
+
 }
 
 elseif (!($prediction153_valid3=="0")){
 			$bus153EarliestArrivalTime = $prediction153_valid3;
-	     	//echo $prediction153_valid3."third one is the earliest";
+
 }
 else {
 			$bus153EarliestArrivalTime = $prediction153_valid4;
-	     	//echo $prediction153_valid4."fourth one is the earliest";
+
 }
 
 //******************************************************************************
@@ -230,23 +222,48 @@ else {
 $bus17OfficeArrivalTime = $bus17EarliestArrivalTime+$bus17Route+$walkDistanceBus17;
 $bus153OfficeArrivalTime = $bus153EarliestArrivalTime+$bus153Route+$walkDistanceBus153;
 
-//echo "<br>".$arrivalatBusStopForBus17Epoch."+".$bus17EarliestArrivalTime."+".$bus17Route."+".$walkDistanceBus17;
-//echo "<br>".$arrivalatBusStopForBus153Epoch."+".$bus153EarliestArrivalTime."+".$bus153Route."+".$walkDistanceBus153;
-//echo "<br>".$bus17OfficeArrivalTime."<br>";
-//echo "<br>".$bus153OfficeArrivalTime."<br>";
-
 //******************************************************************************
 // defining Better Option
 //******************************************************************************
 
+// Which Bus?
+
 if ($bus17OfficeArrivalTime > $bus153OfficeArrivalTime)
 {
 	     	$bestChoice = "Bus 153";
+	     	$officeArrivalTime = date("H:i:s", $bus153OfficeArrivalTime);
 }
 else {
-$bestChoice = "Bus 17";
+			$bestChoice = "Bus 17";
+			$officeArrivalTime = date("H:i:s", $bus17OfficeArrivalTime);
 }
 
+// When?
+
+if ($bestChoice == "Bus 17")
+{
+	     	$nextBusWhen = $bus17EarliestArrivalTime-$currentDateEpoch;
+	     	$nextBusWhenMin = $nextBusWhen/60;
+	     	settype($nextBusWhenMin, "integer");
+}
+else {
+	     	$nextBusWhen = $bus153EarliestArrivalTime-$currentDateEpoch;
+	     	$nextBusWhenMin = $nextBusWhen/60;
+	     	settype($nextBusWhenMin, "integer");
+}
+
+// Where?
+
+if ($bestChoice == "Bus 17")
+{
+	     	$walkTime = $walkTimeBus17/60;
+}
+else {
+$walkTime = $walkTimeBus153/60;
+}
+
+// Wait?
+$waitTime = $nextBusWhenMin-$walkTime;
 
 ?>
 
@@ -382,45 +399,13 @@ $bestChoice = "Bus 17";
 </tr>
 </table>
 
+<h1>Now is <?php echo date("H:i:s"); ?></h1>
 <h1>The Best Choice is <?php echo $bestChoice; ?></h1>
+<h1>The Next Bus will arrive in <?php echo $nextBusWhenMin; ?> minutes</h1> 
+<h1>You usually take <?php echo $walkTime; ?> minutes to arrive in the bus stop, so you will have to wait <?php echo $waitTime; ?>  minutes for the bus</h1>
+<h1>You should arrive in the office at  <?php echo $officeArrivalTime; ?></h1>
 
 <!--
-
-<h1>Now is <?php echo date(DATE_RFC822); ?> in human-readable date format</h1>
-<h1>Now is <?php echo $currentDateEpochms; ?> in epoch date format</h1>
-<h1><?php echo $predictions17[0][1]; ?></h1>
-<h1><?php echo $predictions17[0][2]; ?></h1>
-<h1><?php echo $predictions17[0][3]; ?></h1>
-<br></br>
-<h1>Bus 17</h1>
-
-<ul>
-<li><h2>Walking distance to Bus Stop is <?php echo $walkTimeBus17; ?> in epoch date format</h2></li>
-<li><h2>Bus Stop arrival time <?php echo $arrivalatBusStopForBus17Epoch; ?> in epoch date format</h2></li>
-<li><h2>Bus Stop arrival time <?php echo date('r', $arrivalatBusStopForBus17Epoch); ?> in human-readable date format</h2> </li>
-<li><h2>Office arrival time <?php echo date('r', $bus17OfficeArrivalTime); ?> in human-readable date format</h2> </li>
-<br></br>
-<li><h2>First bus will arrive in <?php echo $result[4]; ?> in epoch date format</h2></li>
-<li><h2>First bus will arrive in <?php echo date('r', $result[4]); ?> in human-readable date format</h2></li>
-
-<li><h2>Second bus will arrive in <?php echo $result[6]; ?> in epoch date format</h2></li>
-<li><h2>Second bus will arrive in <?php echo date('r', $result[6]); ?> in human-readable date format</h2></li>
-
-<li><h2>Third bus will arrive in <?php echo $result[8]; ?> in epoch date format</h2></li>
-<li><h2>Third bus will arrive in <?php echo date('r', $result[8]); ?> in human-readable date format</h2></li>
-
-<li><h2>Fourth bus will arrive in <?php echo $result[10]; ?> in epoch date format</h2></li>
-<li><h2>Fourth bus will arrive in <?php echo date('r', $result[10]); ?> in human-readable date format</h2></li>
-</ul>	
-
-<h1>Bus 153</h1>
-
-<ul>
-<li><h2>Walking distance to Bus Stop is <?php echo $walkTimeBus153; ?> in epoch date format</h2> </li>
-<li><h2>Arrival time in the Bus Stop <?php echo $arrivalatBusStopForBus153Epoch; ?> in epoch date format</h2></li>
-<li><h2>Bus Stop arrival time <?php echo date('r', $arrivalatBusStopForBus153Epoch); ?> in human-readable date format</h2> </li>
-<li><h2>Office arrival time <?php echo date('r', $bus153OfficeArrivalTime); ?> in human-readable date format</h2> </li>
-</ul>
 
 -->
 
