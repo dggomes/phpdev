@@ -11,13 +11,17 @@ unset($GLOBALS);
 $currentDateEpoch = time();
 $currentDateEpochms = $currentDateEpoch;
 
-$walkTimeBus17 = 420; // 7 minutes in epoch (7*60)
-$bus17Route = 1200; // 20 minutes in epoch (20*60)
-$walkDistanceBus17 = 600; // 10 minutes in epoch (15*60)
+$walkTimeBus17 = 240; // 4 minutes in epoch (4*60)
+$bus17Route = 1500; // 25 minutes in epoch (20*60)
+$walkDistanceBus17 = 420; // 10 minutes in epoch (15*60)
 
-$walkTimeBus153 = 900; // 15 minutes in epoch (15*60)
-$bus153Route = 900; // 15 minutes in epoch (15*60)
-$walkDistanceBus153 = 600; // 10 minutes in epoch (15*60)
+$walkTimeBus153 = 600; // 10 minutes in epoch (15*60)
+$bus153Route = 960; // 15 minutes in epoch (15*60)
+$walkDistanceBus153 = 480; // 10 minutes in epoch (15*60)
+
+$walkTimeBus91 = 240; // 10 minutes in epoch (15*60)
+$bus91Route = 1200; // 15 minutes in epoch (15*60)
+$walkDistanceBus91 = 1200; // 10 minutes in epoch (15*60)
 
 //******************************************************************************
 // defining Bus Stop Arrival Time
@@ -25,6 +29,7 @@ $walkDistanceBus153 = 600; // 10 minutes in epoch (15*60)
 
 $arrivalatBusStopForBus17Epoch = $currentDateEpochms+$walkTimeBus17;
 $arrivalatBusStopForBus153Epoch = $currentDateEpochms+$walkTimeBus153;
+$arrivalatBusStopForBus91Epoch = $currentDateEpochms+$walkTimeBus91;
 
 //******************************************************************************
 // retrieving Bus Arrival Time
@@ -68,6 +73,25 @@ $api153 = file_get_contents('http://countdown.api.tfl.gov.uk/interfaces/ura/inst
 
 preg_match_all('@\d\d\d\d\d\d\d\d\d\d\d\d\d@', $api153, $predictions153, PREG_PATTERN_ORDER);
 
+// BUS 91
+
+$opts = array(
+  'http'=>array(
+    'method'=>"GET",
+    'header'=>"Accept-language: en\r\n" .
+              "Cookie: foo=bar\r\n"
+  
+ )
+);
+
+$context = stream_context_create($opts);
+
+$api91 = file_get_contents('http://countdown.api.tfl.gov.uk/interfaces/ura/instant_V1?StopCode1=71556&LineID=91&DirectionID=1&VisitNumber=1&ReturnList=EstimatedTime', false, $context);
+//$api91 = file_get_contents('/Users/danielgomes/Development/phpdev/busChoice/data2.txt', false, $context);
+
+preg_match_all('@\d\d\d\d\d\d\d\d\d\d\d\d\d@', $api91, $predictions91, PREG_PATTERN_ORDER);
+
+
 //******************************************************************************
 // converting from ms
 //******************************************************************************
@@ -81,6 +105,11 @@ $predictions153[0][1] = $predictions153[0][1] / 1000;
 $predictions153[0][2] = $predictions153[0][2] / 1000;
 $predictions153[0][3] = $predictions153[0][3] / 1000;
 $predictions153[0][4] = $predictions153[0][4] / 1000;
+
+$predictions91[0][1] = $predictions91[0][1] / 1000;
+$predictions91[0][2] = $predictions91[0][2] / 1000;
+$predictions91[0][3] = $predictions91[0][3] / 1000;
+$predictions91[0][4] = $predictions91[0][4] / 1000;
 
 //******************************************************************************
 // getting only Arrival Times bigger than current time + walktime
@@ -169,6 +198,49 @@ $prediction153_valid4 = "0";
 
 }
 
+// BUS 91
+
+if ($predictions91[0][1] > $arrivalatBusStopForBus91Epoch)
+{
+	     	$prediction91_valid1 = $predictions91[0][1];
+
+}
+else {
+$prediction91_valid1 = "0";
+
+}
+
+if ($predictions91[0][2] > $arrivalatBusStopForBus91Epoch)
+{
+	     	$prediction91_valid2 = $predictions91[0][2];
+
+}
+else {
+$prediction91_valid2 = "0";
+
+}
+
+if ($predictions91[0][3] > $arrivalatBusStopForBus91Epoch)
+{
+	     	$prediction91_valid3 = $predictions91[0][3];
+
+}
+else {
+$prediction91_valid3 = "0";
+
+}
+
+if ($predictions91[0][4] > $arrivalatBusStopForBus91Epoch)
+{
+	     	$prediction91_valid4 = $predictions91[0][4];
+
+}
+else {
+$prediction91_valid4 = "0";
+
+}
+
+
 //******************************************************************************
 // checking Earliest Arrival Time
 //******************************************************************************
@@ -215,18 +287,59 @@ else {
 
 }
 
+// BUS 91
+
+if (!($prediction91_valid1=="0"))
+{
+	     	$bus91EarliestArrivalTime = $prediction91_valid1;
+
+}
+elseif (!($prediction91_valid2=="0")){
+			$bus91EarliestArrivalTime = $prediction91_valid2;
+
+}
+
+elseif (!($prediction91_valid3=="0")){
+			$bus91EarliestArrivalTime = $prediction91_valid3;
+
+}
+else {
+			$bus91EarliestArrivalTime = $prediction91_valid4;
+
+}
+
 //******************************************************************************
 // defining Office Arrival Time
 //******************************************************************************
 
 $bus17OfficeArrivalTime = $bus17EarliestArrivalTime+$bus17Route+$walkDistanceBus17;
 $bus153OfficeArrivalTime = $bus153EarliestArrivalTime+$bus153Route+$walkDistanceBus153;
+$bus91OfficeArrivalTime = $bus91EarliestArrivalTime+$bus91Route+$walkDistanceBus91;
 
 //******************************************************************************
 // defining Better Option
 //******************************************************************************
 
 // Which Bus?
+
+if (($bus153OfficeArrivalTime < $bus17OfficeArrivalTime)&&($bus153OfficeArrivalTime < $bus91OfficeArrivalTime))
+{
+	     	$bestChoice = "Bus 153";
+	     	$officeArrivalTime = date("H:i:s", $bus153OfficeArrivalTime);
+}
+
+elseif (($bus17OfficeArrivalTime < $bus153OfficeArrivalTime)&&($bus17OfficeArrivalTime < $bus91OfficeArrivalTime))
+{
+	     	$bestChoice = "Bus 17";
+	     	$officeArrivalTime = date("H:i:s", $bus153OfficeArrivalTime);
+}
+
+else {
+			$bestChoice = "Bus 91";
+			$officeArrivalTime = date("H:i:s", $bus17OfficeArrivalTime);
+}
+
+/* OLD
 
 if ($bus17OfficeArrivalTime > $bus153OfficeArrivalTime)
 {
@@ -252,14 +365,38 @@ else {
 	     	settype($nextBusWhenMin, "integer");
 }
 
-// Where?
+*/
+
+
+// When?
 
 if ($bestChoice == "Bus 17")
 {
-	     	$walkTime = $walkTimeBus17/60;
+	     	$nextBusWhen = $bus17EarliestArrivalTime-$currentDateEpoch;
+	     	$nextBusWhenMin = $nextBusWhen/60;
+	     	settype($nextBusWhenMin, "integer");
+}
+elseif ($bestChoice == "Bus 153")
+{
+	     	$nextBusWhen = $bus153EarliestArrivalTime-$currentDateEpoch;
+	     	$nextBusWhenMin = $nextBusWhen/60;
+	     	settype($nextBusWhenMin, "integer");
 }
 else {
-$walkTime = $walkTimeBus153/60;
+	     	$nextBusWhen = $bus91EarliestArrivalTime-$currentDateEpoch;
+	     	$nextBusWhenMin = $nextBusWhen/60;
+	     	settype($nextBusWhenMin, "integer");
+}
+
+
+// Where?
+
+if ($bestChoice == "Bus 153")
+{
+	     	$walkTime = $walkTimeBus153/60;
+}
+else {
+$walkTime = $walkTimeBus17/60;
 }
 
 // Wait?
@@ -343,6 +480,30 @@ $waitTime = $nextBusWhenMin-$walkTime;
 </tr>
 </table>
 
+<h1>Bus 91 - Average</h1>
+<table border="1">
+<tr>
+<td>Current time</td>
+<td>Walk BusStop</td>
+<td>Arrival at Bus Stop</td>
+<td>Arrival at Bus Stop</td>
+<td>Route</td>
+<td>Walk Office</td>
+<td>Arrival Office</td>
+<td>Arrival Office</td>
+</tr>
+<tr>
+<td><?php echo $currentDateEpochms; ?></td>
+<td><?php echo $walkTimeBus91; ?></td>
+<td><?php echo $arrivalatBusStopForBus91Epoch; ?></td>
+<td><?php echo date('r', $arrivalatBusStopForBus91Epoch); ?></td>
+<td><?php echo $bus91Route; ?></td>
+<td><?php echo $walkDistanceBus91; ?></td>
+<td><?php echo $bus91OfficeArrivalTime; ?></td>
+<td><?php echo date('r', $bus91OfficeArrivalTime); ?></td>
+</tr>
+</table>
+
 <h1>TFL</h1>
 <table border="1">
 <tr>
@@ -378,6 +539,17 @@ $waitTime = $nextBusWhenMin-$walkTime;
 <td><?php echo $predictions153[0][4]; ?></td>
 <td><?php echo $prediction153_valid4; ?></td>
 </tr>
+<tr>
+<td>Bus 91</td>
+<td><?php echo $predictions91[0][1]; ?></td>
+<td><?php echo $prediction91_valid1; ?></td>
+<td><?php echo $predictions91[0][2]; ?></td>
+<td><?php echo $prediction91_valid2; ?></td>
+<td><?php echo $predictions91[0][3]; ?></td>
+<td><?php echo $prediction91_valid3; ?></td>
+<td><?php echo $predictions91[0][4]; ?></td>
+<td><?php echo $prediction91_valid4; ?></td>
+</tr>
 </table>
 
 <h1>Conclusion</h1>
@@ -402,6 +574,13 @@ $waitTime = $nextBusWhenMin-$walkTime;
 <td><?php echo date('r', $bus153EarliestArrivalTime); ?></td>
 <td><?php echo $bus153OfficeArrivalTime; ?></td>
 <td><?php echo date('r', $bus153OfficeArrivalTime); ?></td>
+</tr>
+<tr>
+<td>Bus 91</td>
+<td><?php echo $bus91EarliestArrivalTime; ?></td>
+<td><?php echo date('r', $bus91EarliestArrivalTime); ?></td>
+<td><?php echo $bus91OfficeArrivalTime; ?></td>
+<td><?php echo date('r', $bus91OfficeArrivalTime); ?></td>
 </tr>
 </table>
 
