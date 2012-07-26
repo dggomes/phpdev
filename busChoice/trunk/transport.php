@@ -23,6 +23,11 @@ $walkTimeBus91 = 240; // 10 minutes in epoch (15*60)
 $bus91Route = 1200; // 15 minutes in epoch (15*60)
 $walkDistanceBus91 = 1200; // 10 minutes in epoch (15*60)
 
+$walkDistanceTube1 = 600; // 10 minutes in epoch
+$tubeRoute = 1800; // 30 minutes in epoch (30*60)
+$walkDistanceTube2 = 600; // 10 minutes in epoch
+$tubeTime = $walkDistanceTube1+$tubeRoute+$walkDistanceTube2;
+
 //******************************************************************************
 // defining Bus Stop Arrival Time
 //******************************************************************************
@@ -315,6 +320,32 @@ else {
 $bus17OfficeArrivalTime = $bus17EarliestArrivalTime+$bus17Route+$walkDistanceBus17;
 $bus153OfficeArrivalTime = $bus153EarliestArrivalTime+$bus153Route+$walkDistanceBus153;
 $bus91OfficeArrivalTime = $bus91EarliestArrivalTime+$bus91Route+$walkDistanceBus91;
+$tubeOfficeArrivalTime = $currentDateEpoch+$walkDistanceTube1+$tubeRoute+$walkDistanceTube2;
+
+//******************************************************************************
+// validating Office Arrival Time (to avoid nil)
+//******************************************************************************
+
+if ($bus17OfficeArrivalTime < $currentDateEpoch)
+{
+	     	$bus17OfficeArrivalTime = $bus17OfficeArrivalTime+$currentDateEpoch+$currentDateEpoch;
+//	     	echo "Bus17 ".$bus17OfficeArrivalTime." invalid";
+
+}
+
+if ($bus91OfficeArrivalTime < $currentDateEpoch)
+{
+	     	$bus91OfficeArrivalTime = $bus91OfficeArrivalTime+$currentDateEpoch+$currentDateEpoch;
+//	     	echo "Bus19 ".$bus91OfficeArrivalTime." invalid";
+}
+
+if ($bus153OfficeArrivalTime < $currentDateEpoch)
+
+{
+	     	$bus153OfficeArrivalTime = $bus153OfficeArrivalTime+$currentDateEpoch+$currentDateEpoch;
+//	     	echo "Bus153 ".$bus153OfficeArrivalTime." invalid";
+
+}
 
 //******************************************************************************
 // defining Better Option
@@ -322,51 +353,74 @@ $bus91OfficeArrivalTime = $bus91EarliestArrivalTime+$bus91Route+$walkDistanceBus
 
 // Which Bus?
 
-if (($bus153OfficeArrivalTime < $bus17OfficeArrivalTime)&&($bus153OfficeArrivalTime < $bus91OfficeArrivalTime))
+if (
+	($bus153EarliestArrivalTime > $arrivalatBusStopForBus153Epoch)
+	&&
+	($bus153OfficeArrivalTime < $bus17OfficeArrivalTime)
+	&&
+	($bus153OfficeArrivalTime < $bus91OfficeArrivalTime)
+	&&
+	($bus153OfficeArrivalTime < $tubeOfficeArrivalTime)
+	)
 {
+//			echo "153";
 	     	$bestChoice = "Bus 153";
 	     	$officeArrivalTime = date("H:i:s", $bus153OfficeArrivalTime);
+	     	$routeTime = $bus153OfficeArrivalTime;
 }
 
-elseif (($bus17OfficeArrivalTime < $bus153OfficeArrivalTime)&&($bus17OfficeArrivalTime < $bus91OfficeArrivalTime))
+elseif (
+	($bus17EarliestArrivalTime > $arrivalatBusStopForBus17Epoch)
+	&&
+	($bus17OfficeArrivalTime < $bus153OfficeArrivalTime)
+	&&
+	($bus17OfficeArrivalTime < $bus91OfficeArrivalTime)
+	&&
+	($bus17OfficeArrivalTime < $tubeOfficeArrivalTime)
+	)
 {
+//			echo "17";
 	     	$bestChoice = "Bus 17";
-	     	$officeArrivalTime = date("H:i:s", $bus153OfficeArrivalTime);
+	     	$officeArrivalTime = date("H:i:s", $bus17OfficeArrivalTime);
+	     	$routeTime = $bus17OfficeArrivalTime;
 }
 
-else {
-			$bestChoice = "Bus 91";
-			$officeArrivalTime = date("H:i:s", $bus17OfficeArrivalTime);
-}
-
-/* OLD
-
-if ($bus17OfficeArrivalTime > $bus153OfficeArrivalTime)
+elseif (
+	($bus91EarliestArrivalTime > $arrivalatBusStopForBus91Epoch)
+	&&
+	($bus91OfficeArrivalTime < $bus17OfficeArrivalTime)
+	&&
+	($bus91OfficeArrivalTime < $bus153OfficeArrivalTime)
+	&&
+	($bus91OfficeArrivalTime < $tubeOfficeArrivalTime)
+	)
 {
-	     	$bestChoice = "Bus 153";
-	     	$officeArrivalTime = date("H:i:s", $bus153OfficeArrivalTime);
-}
-else {
-			$bestChoice = "Bus 17";
-			$officeArrivalTime = date("H:i:s", $bus17OfficeArrivalTime);
+//			echo "91";
+	     	$bestChoice = "Bus 91";
+	     	$officeArrivalTime = date("H:i:s", $bus91OfficeArrivalTime);
+	     	$routeTime = $bus91OfficeArrivalTime;
 }
 
-// When?
-
-if ($bestChoice == "Bus 17")
+elseif (
+	($tubeOfficeArrivalTime < $bus17OfficeArrivalTime)
+	&&
+	($tubeOfficeArrivalTime < $bus153OfficeArrivalTime)
+	&&
+	($tubeOfficeArrivalTime < $bus91OfficeArrivalTime)
+	)
 {
-	     	$nextBusWhen = $bus17EarliestArrivalTime-$currentDateEpoch;
-	     	$nextBusWhenMin = $nextBusWhen/60;
-	     	settype($nextBusWhenMin, "integer");
+//			echo "Tube";
+			$bestChoice = "TUBE";
+			$officeArrivalTime = date("H:i:s", ($currentDateEpoch+$tubeRoute));
+	     	$routeTime = $tubeRoute/60;
 }
+
 else {
-	     	$nextBusWhen = $bus153EarliestArrivalTime-$currentDateEpoch;
-	     	$nextBusWhenMin = $nextBusWhen/60;
-	     	settype($nextBusWhenMin, "integer");
+			echo "WRONG";
+			$bestChoice = "WRONG";
+			$officeArrivalTime = date("H:i:s", ($currentDateEpoch+$tubeRoute));
+	     	$routeTime = $tubeRoute/60;
 }
-
-*/
-
 
 // When?
 
@@ -382,10 +436,17 @@ elseif ($bestChoice == "Bus 153")
 	     	$nextBusWhenMin = $nextBusWhen/60;
 	     	settype($nextBusWhenMin, "integer");
 }
-else {
+
+elseif ($bestChoice == "Bus 91")
+{
 	     	$nextBusWhen = $bus91EarliestArrivalTime-$currentDateEpoch;
 	     	$nextBusWhenMin = $nextBusWhen/60;
 	     	settype($nextBusWhenMin, "integer");
+}
+
+else {
+	     	$nextBusWhenMin = "NOTSURE";
+
 }
 
 
@@ -402,6 +463,53 @@ $walkTime = $walkTimeBus17/60;
 // Wait?
 $waitTime = $nextBusWhenMin-$walkTime;
 
+// Calculating Route Time
+
+$routeMin153 = ($bus153OfficeArrivalTime-$currentDateEpoch)/60;
+	     	settype($routeMin153, "integer");
+$routeMin17 = ($bus17OfficeArrivalTime-$currentDateEpoch)/60;
+	     	settype($routeMin17, "integer");
+$routeMin91 = ($bus91OfficeArrivalTime-$currentDateEpoch)/60;
+	     	settype($routeMin91, "integer");
+$routeMinTube = $tubeTime/60;
+	     	settype($routeMinTube, "integer");
+
+
+if ($bestChoice == "TUBE")
+{
+	     	$nextBusWhenMin = "NOTSURE";
+	     	$routeMin = $tubeTime/60;
+	     	settype($routeMin, "integer");
+}
+
+else {
+	     	$nextBusWhen = $bus17EarliestArrivalTime-$currentDateEpoch;
+	     	$nextBusWhenMin = $nextBusWhen/60;
+	     	settype($nextBusWhenMin, "integer");
+
+
+	     	$routeEpoch = $routeTime-$currentDateEpochms;
+	     	$routeMin = $routeEpoch/60;
+	     	settype($routeMin, "integer");
+
+}
+
+// BUS or TUBE copy
+
+if ($bestChoice == "TUBE")
+{
+			$bestChoiceCopy = "No luck today, better getting the tube!";
+			$waitTimeCopy = "No luck today, better getting the tube!";
+			$journeyTimeCopy = "The journey takes ".$routeMin." minutes in average so you should arrive in the office at ".$officeArrivalTime.".";
+}
+
+else {
+			$bestChoiceCopy = "The Best Choice is ".$bestChoice.", it will arrive in ".$nextBusWhenMin." minutes";
+			$waitTimeCopy = "No luck today, better getting the tube!";
+			$walkAndWaitCopy = "You usually take ".$walkTime." minutes to arrive in the bus stop, so you will have to wait ".$waitTime." minutes for the bus";
+			$journeyTimeCopy = "The journey will takes ".$routeMin." minutes so you should arrive in the office at ".$officeArrivalTime.".";
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -415,10 +523,9 @@ $waitTime = $nextBusWhenMin-$walkTime;
 <div id="writtencontent">
 
 <h1>Now is <?php echo date("H:i:s"); ?></h1>
-<h1>The Best Choice is <?php echo $bestChoice; ?></h1>
-<h1>The Next Bus will arrive in <?php echo $nextBusWhenMin; ?> minutes</h1> 
-<h1>You usually take <?php echo $walkTime; ?> minutes to arrive in the bus stop, so you will have to wait <?php echo $waitTime; ?>  minutes for the bus</h1>
-<h1>You should arrive in the office at  <?php echo $officeArrivalTime; ?></h1>
+<h1><?php echo $bestChoiceCopy; ?></h1> 
+<h1><?php echo $walkAndWaitCopy; ?></h1>
+<h1><?php echo $journeyTimeCopy; ?></h1>
 
 <h1>Today</h1>
 <table border="1">
@@ -504,6 +611,26 @@ $waitTime = $nextBusWhenMin-$walkTime;
 </tr>
 </table>
 
+<h1>Tube</h1>
+<table border="1">
+<tr>
+<td>Current time</td>
+<td>Walk Caledonian Road</td>
+<td>Route</td>
+<td>Walk Farringdon</td>
+<td>Arrival Office</td>
+<td>Arrival Office</td>
+</tr>
+<tr>
+<td><?php echo $currentDateEpochms; ?></td>
+<td><?php echo $walkDistanceTube1; ?></td>
+<td><?php echo $tubeRoute; ?></td>
+<td><?php echo $walkDistanceTube2; ?></td>
+<td><?php echo $tubeOfficeArrivalTime; ?></td>
+<td><?php echo date('r', $tubeOfficeArrivalTime); ?></td>
+</tr>
+</table>
+
 <h1>TFL</h1>
 <table border="1">
 <tr>
@@ -560,6 +687,7 @@ $waitTime = $nextBusWhenMin-$walkTime;
 <td>ArrivalDate</td>
 <td>OfficeTime</td>
 <td>OfficeDate</td>
+<td>JourneyTime</td>
 </tr>
 <tr>
 <td>Bus 17</td>
@@ -567,6 +695,7 @@ $waitTime = $nextBusWhenMin-$walkTime;
 <td><?php echo date('r', $bus17EarliestArrivalTime); ?></td>
 <td><?php echo $bus17OfficeArrivalTime; ?></td>
 <td><?php echo date('r', $bus17OfficeArrivalTime); ?></td>
+<td><?php echo $routeMin17; ?> min</td>
 </tr>
 <tr>
 <td>Bus 153</td>
@@ -574,6 +703,7 @@ $waitTime = $nextBusWhenMin-$walkTime;
 <td><?php echo date('r', $bus153EarliestArrivalTime); ?></td>
 <td><?php echo $bus153OfficeArrivalTime; ?></td>
 <td><?php echo date('r', $bus153OfficeArrivalTime); ?></td>
+<td><?php echo $routeMin153; ?> min</td>
 </tr>
 <tr>
 <td>Bus 91</td>
@@ -581,6 +711,14 @@ $waitTime = $nextBusWhenMin-$walkTime;
 <td><?php echo date('r', $bus91EarliestArrivalTime); ?></td>
 <td><?php echo $bus91OfficeArrivalTime; ?></td>
 <td><?php echo date('r', $bus91OfficeArrivalTime); ?></td>
+<td><?php echo $routeMin91; ?> min</td>
+<tr>
+<td>Tube</td>
+<td></td>
+<td></td>
+<td><?php echo $tubeOfficeArrivalTime; ?></td>
+<td><?php echo date('r', $tubeOfficeArrivalTime); ?></td>
+<td><?php echo $routeMinTube; ?> min</td>
 </tr>
 </table>
 
