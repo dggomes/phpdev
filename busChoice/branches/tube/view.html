@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>A Transport script</title>
+<link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+<div id="writtencontent">
+<h1>Now is <?php echo date(DATE_RFC822); ?> in human-readable date format</h1>
+<h1>Now is <?php echo $currentDateEpoch; ?> in epoch date format</h1>
+<h1><?php echo $predictions17[0][1]; ?></h1>
+<h1><?php echo $predictions17[0][2]; ?></h1>
+<h1><?php echo $predictions17[0][3]; ?></h1>
+<br></br>
+<h1>Bus 17</h1>
+
+<ul>
+<li><h2>Walking distance to Bus Stop is <?php echo $walkTimeBus17; ?> in epoch date format</h2></li>
+<li><h2>Bus Stop arrival time <?php echo $arrivalatBusStopForBus17Epoch; ?> in epoch date format</h2></li>
+<li><h2>Bus Stop arrival time <?php echo date('r', $arrivalatBusStopForBus17Epoch); ?> in human-readable date format</h2> </li>
+<li><h2>Office arrival time <?php echo date('r', $bus17OfficeArrivalTime); ?> in human-readable date format</h2> </li>
+<br></br>
+<li><h2>First bus will arrive in <?php echo $result[4]; ?> in epoch date format</h2></li>
+<li><h2>First bus will arrive in <?php echo date('r', $result[4]); ?> in human-readable date format</h2></li>
+
+<li><h2>Second bus will arrive in <?php echo $result[6]; ?> in epoch date format</h2></li>
+<li><h2>Second bus will arrive in <?php echo date('r', $result[6]); ?> in human-readable date format</h2></li>
+
+<li><h2>Third bus will arrive in <?php echo $result[8]; ?> in epoch date format</h2></li>
+<li><h2>Third bus will arrive in <?php echo date('r', $result[8]); ?> in human-readable date format</h2></li>
+
+<li><h2>Fourth bus will arrive in <?php echo $result[10]; ?> in epoch date format</h2></li>
+<li><h2>Fourth bus will arrive in <?php echo date('r', $result[10]); ?> in human-readable date format</h2></li>
+</ul>	
+
+<h1>Bus 153</h1>
+
+<ul>
+<li><h2>Walking distance to Bus Stop is <?php echo $walkTimeBus153; ?> in epoch date format</h2> </li>
+<li><h2>Arrival time in the Bus Stop <?php echo $arrivalatBusStopForBus153Epoch; ?> in epoch date format</h2></li>
+<li><h2>Bus Stop arrival time <?php echo date('r', $arrivalatBusStopForBus153Epoch); ?> in human-readable date format</h2> </li>
+<li><h2>Office arrival time <?php echo date('r', $bus153OfficeArrivalTime); ?> in human-readable date format</h2> </li>
+</div>
+</ul>
+
+</body>
+</html>
