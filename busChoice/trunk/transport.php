@@ -416,8 +416,8 @@ elseif (
 }
 
 else {
-			echo "WRONG";
-			$bestChoice = "WRONG";
+	//		echo "WRONG";
+			$bestChoice = "OOPZ, TRY AGAIN";
 			$officeArrivalTime = date("H:i:s", ($currentDateEpoch+$tubeRoute));
 	     	$routeTime = $tubeRoute/60;
 }
@@ -426,12 +426,14 @@ else {
 
 if ($bestChoice == "Bus 17")
 {
+			$nextBus = $bus17EarliestArrivalTime;
 	     	$nextBusWhen = $bus17EarliestArrivalTime-$currentDateEpoch;
 	     	$nextBusWhenMin = $nextBusWhen/60;
 	     	settype($nextBusWhenMin, "integer");
 }
 elseif ($bestChoice == "Bus 153")
 {
+			$nextBus = $bus153EarliestArrivalTime;
 	     	$nextBusWhen = $bus153EarliestArrivalTime-$currentDateEpoch;
 	     	$nextBusWhenMin = $nextBusWhen/60;
 	     	settype($nextBusWhenMin, "integer");
@@ -439,6 +441,7 @@ elseif ($bestChoice == "Bus 153")
 
 elseif ($bestChoice == "Bus 91")
 {
+			$nextBus = $bus91EarliestArrivalTime;
 	     	$nextBusWhen = $bus91EarliestArrivalTime-$currentDateEpoch;
 	     	$nextBusWhenMin = $nextBusWhen/60;
 	     	settype($nextBusWhenMin, "integer");
@@ -504,8 +507,7 @@ if ($bestChoice == "TUBE")
 }
 
 else {
-			$bestChoiceCopy = "The Best Choice is ".$bestChoice.", it will arrive in ".$nextBusWhenMin." minutes";
-			$waitTimeCopy = "No luck today, better getting the tube!";
+			$bestChoiceCopy = "The best Choice is ".$bestChoice.", it will arrive in ".$nextBusWhenMin." minutes (".date("H:i:s", $nextBus).")";
 			$walkAndWaitCopy = "You usually take ".$walkTime." minutes to arrive in the bus stop, so you will have to wait ".$waitTime." minutes for the bus";
 			$journeyTimeCopy = "The journey will takes ".$routeMin." minutes so you should arrive in the office at ".$officeArrivalTime.".";
 }
