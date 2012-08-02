@@ -1,7 +1,0 @@
-Variables
-
-$currentDateEpoch
-$currentDateEpochms
-$walkTimeBus17 (Epoch)
-$bus17Route (Epoch)
-$walkDistanceBus17 (Epoch)

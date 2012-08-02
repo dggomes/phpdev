@@ -3,9 +3,7 @@
 <head>
 <title>Which Bus?</title>
 <link href="style.css" rel="stylesheet" type="text/css" />
-<script type="text/JavaScript" src="toggle.js"></script> 
 <meta name="viewport" content="width=device-width, user-scalable=no" />
-
 </head>
 <body>
 <?php include("transport.php"); ?>
@@ -17,14 +15,16 @@
 <div id="menuContainer" class="menuContainer">
 
 <ul id="menu" >
-		<li><a id="displayBus17" href="javascript:toggleBus17();">Bus 17</a></li>
-		<li><a id="displayBus153" href="javascript:toggleBus153();">Bus 153</a></li>
-		<li><a id="displayBus91" href="javascript:toggleBus91();">Bus 91</a></li>
-		<li><a id="displayTube" href="javascript:toggleTube();">Predic</a></li>
-		<li><a id="displayTfl" href="javascript:toggleTFL();">TFL</a></li>
+		<li><a id="displayBus17">Bus 17</a></li>
+		<li><a id="displayBus153">Bus 153</a></li>
+		<li><a id="displayBus91">Bus 91</a></li>
+		<li><a id="displayTube">Predic</a></li>
+		<li><a id="displayTfl">TFL</a></li>
 </ul>
 
 </div>
+
+
 
 <div id="bestChoice" class="roundedcorner">
 
@@ -288,4 +288,6 @@
 </div>
 
 </body>
+<script type="text/JavaScript" src="jquery.min.js"></script> 
+<script src="toggle.js" charset="UTF-8"></script>
 </html>

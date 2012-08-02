@@ -1,135 +1,45 @@
-function toggleBus17() {
-	var element17 = document.getElementById("bus17");
-	var element153 = document.getElementById("bus153");
-	var element91 = document.getElementById("bus91");
-	var elementTube = document.getElementById("tube");
-	var elementTFL = document.getElementById("tfl");
+// JQUERY
 
-	if(element17.style.display == "block")
-	{
-    		element17.style.display = "none";
+jQuery(document).ready(function($){
+jQuery.fx.off = true;
 
-  	}
+	$('#displayBus17').click(function() {
+	  $('#bus17').toggle(function() {
+	  });
+	  $("#bus153, #bus91, #tube, #tfl").hide(function() {
+	  });
+	});
 	
-	else 
-
-	{
-		element17.style.display = "block";
-		
-    	element153.style.display = "none";
-  	    element91.style.display = "none";  		      	    
-  	    elementTube.style.display = "none";  		    
-        elementTFL.style.display = "none";
-
-
-	}
+	$('#displayBus153').click(function() {
+	  $('#bus153').toggle(function() {
+	  });
+	  $("#bus17, #bus91, #tube, #tfl").hide(function() {
+	  });
 	
-}
+	});
 	
-function toggleBus153() {
-	var element17 = document.getElementById("bus17");
-	var element153 = document.getElementById("bus153");
-	var element91 = document.getElementById("bus91");
-	var elementTube = document.getElementById("tube");
-	var elementTFL = document.getElementById("tfl");
-
-	if(element153.style.display == "block")
-	{
-    		element153.style.display = "none";
-
-  	}
+	$('#displayBus91').click(function() {
+	  $('#bus91').toggle(function() {
+	  });
+	  $("#bus153, #bus17, #tube, #tfl").hide(function() {
+	  });
 	
-	else 
-
-	{
-		element153.style.display = "block";
-		
-    	element17.style.display = "none";
-  	    element91.style.display = "none";  		      	    
-  	    elementTube.style.display = "none";  		    
-        elementTFL.style.display = "none";
-
-	}
+	});
 	
-}
+	$('#displayTube').click(function() {
+	  $('#tube').toggle(function() {
+	  });
+	  $("#bus153, #bus91, #bus17, #tfl").hide(function() {
+	  });
 	
-function toggleBus91() {
-	var element17 = document.getElementById("bus17");
-	var element153 = document.getElementById("bus153");
-	var element91 = document.getElementById("bus91");
-	var elementTube = document.getElementById("tube");
-	var elementTFL = document.getElementById("tfl");
-
-	if(element91.style.display == "block")
-	{
-    		element91.style.display = "none";
-
-  	}
+	});
 	
-	else 
-
-	{
-		element91.style.display = "block";
-
-    	element17.style.display = "none";
-  	    element153.style.display = "none";  		      	    
-  	    elementTube.style.display = "none";  		    
-        elementTFL.style.display = "none";
-
-	}
+	$('#displayTfl').click(function() {
+	  $('#tfl').toggle(function() {
+	  });
+	  $("#bus153, #bus91, #tube, #bus17").hide(function() {
+	  });
 	
-}
-	
-function toggleTube() {
-	var element17 = document.getElementById("bus17");
-	var element153 = document.getElementById("bus153");
-	var element91 = document.getElementById("bus91");
-	var elementTube = document.getElementById("tube");
-	var elementTFL = document.getElementById("tfl");
+	});
 
-	if(elementTube.style.display == "block")
-	{
-    		elementTube.style.display = "none";
-
-  	}
-	
-	else 
-
-	{
-		elementTube.style.display = "block";
-
-    	element17.style.display = "none";
-  	    element153.style.display = "none";  		      	    
-  	    element91.style.display = "none";  		    
-        elementTFL.style.display = "none";
-
-	}
-	
-}
-
-	
-function toggleTFL() {
-	var element17 = document.getElementById("bus17");
-	var element153 = document.getElementById("bus153");
-	var element91 = document.getElementById("bus91");
-	var elementTube = document.getElementById("tube");
-	var elementTFL = document.getElementById("tfl");
-
-	if(elementTFL.style.display == "block")
-	{
-    		elementTFL.style.display = "none";
-  	}
-	
-	else 
-
-	{
-		elementTFL.style.display = "block";
-		
-    	element17.style.display = "none";
-  	    element153.style.display = "none";  		      	    
-  	    element91.style.display = "none";  		    
-        elementTube.style.display = "none";
-
-	}
-	
-}
+});

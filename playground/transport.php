@@ -96,12 +96,6 @@ $api91 = file_get_contents('http://countdown.api.tfl.gov.uk/interfaces/ura/insta
 
 preg_match_all('@\d\d\d\d\d\d\d\d\d\d\d\d\d@', $api91, $predictions91, PREG_PATTERN_ORDER);
 
-//TUBE
-
-$tflApi = "http://cloud.tfl.gov.uk/TrackerNet/PredictionDetailed/P/CRD";
-$tubeTflXml = file_get_contents($url);
-
-//$tubeTflXml = file_get_contents('http://cloud.tfl.gov.uk/TrackerNet/PredictionDetailed/P/CRD', false, $context);
 
 //******************************************************************************
 // converting from ms

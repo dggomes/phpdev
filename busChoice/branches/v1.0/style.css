@@ -7,6 +7,10 @@
  font-weight: normal;
 }
 
+.hidden {
+  display: none;
+}
+
 body {
 						background-color: #fff;
 						font-family:"Arial";
