@@ -3,6 +3,21 @@
 jQuery(document).ready(function($){
 jQuery.fx.off = true;
 
+//Default jQuery function------
+
+/*
+
+	$(buttonDiv).click(function() {
+	  $(toggledDiv).toggle(function() {
+	  });
+	  $(hiddenDivs).hide(function() {
+	  });
+	});
+
+*/
+
+//---------------------
+
 	$('#displayBus17').click(function() {
 	  $('#bus17').toggle(function() {
 	  });
