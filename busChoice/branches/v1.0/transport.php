@@ -117,6 +117,22 @@ $predictions91[0][3] = $predictions91[0][3] / 1000;
 $predictions91[0][4] = $predictions91[0][4] / 1000;
 
 //******************************************************************************
+// making these times readable
+//******************************************************************************
+
+$tflArrival17_1 = (($predictions17[0][1]-$currentDateEpochms)/60);settype($tflArrival17_1, "integer");
+$tflArrival17_2 = (($predictions17[0][2]-$currentDateEpochms)/60);settype($tflArrival17_2, "integer");
+$tflArrival17_3 = (($predictions17[0][3]-$currentDateEpochms)/60);settype($tflArrival17_3, "integer");
+
+$tflArrival153_1 = (($predictions153[0][1]-$currentDateEpochms)/60);settype($tflArrival153_1, "integer");
+$tflArrival153_2 = (($predictions153[0][2]-$currentDateEpochms)/60);settype($tflArrival153_2, "integer");
+$tflArrival153_3 = (($predictions153[0][3]-$currentDateEpochms)/60);settype($tflArrival153_3, "integer");
+
+$tflArrival91_1 = (($predictions91[0][1]-$currentDateEpochms)/60);settype($tflArrival91_1, "integer");
+$tflArrival91_2 = (($predictions91[0][2]-$currentDateEpochms)/60);settype($tflArrival91_2, "integer");
+$tflArrival91_3 = (($predictions91[0][3]-$currentDateEpochms)/60);settype($tflArrival91_3, "integer");
+
+//******************************************************************************
 // getting only Arrival Times bigger than current time + walktime
 //******************************************************************************
 
@@ -206,6 +222,7 @@ $prediction153_valid4 = "0";
 // BUS 91
 
 if ($predictions91[0][1] > $arrivalatBusStopForBus91Epoch)
+
 {
 	     	$prediction91_valid1 = $predictions91[0][1];
 
@@ -271,6 +288,8 @@ else {
 
 }
 
+$saferArrival17 = (($bus17EarliestArrivalTime-$currentDateEpochms)/60);settype($saferArrival17, "integer");
+
 // BUS 153
 
 if (!($prediction153_valid1=="0"))
@@ -292,6 +311,8 @@ else {
 
 }
 
+$saferArrival153 = (($bus153EarliestArrivalTime-$currentDateEpochms)/60);settype($saferArrival153, "integer");
+
 // BUS 91
 
 if (!($prediction91_valid1=="0"))
@@ -312,6 +333,8 @@ else {
 			$bus91EarliestArrivalTime = $prediction91_valid4;
 
 }
+
+$saferArrival91 = (($bus91EarliestArrivalTime-$currentDateEpochms)/60);settype($saferArrival91, "integer");
 
 //******************************************************************************
 // defining Office Arrival Time
@@ -469,8 +492,7 @@ settype($routeMin, "integer");
 
 // COPY
 
-			$bestChoiceCopy = "The best Choice is ".$bestChoice.", it will arrive in ".$nextBusWhenMin." minutes (".date("H:i:s", $nextBus).")";
-			$walkAndWaitCopy = "You usually take ".$walkTime." minutes to arrive in the bus stop, so you will have to wait ".$waitTime." minutes for the bus";
+			$bestChoiceCopy = "Best choice is ".$bestChoice.". Wait time is ".$waitTime." minutes.";
 			$journeyTimeCopy = "The journey will takes ".$routeMin." minutes so you should arrive in the office at ".$officeArrivalTime.".";
 
 ?>

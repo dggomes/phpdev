@@ -11,21 +11,21 @@ unset($GLOBALS);
 $currentDateEpoch = time();
 $currentDateEpochms = $currentDateEpoch;
 
-$walkTimeBus17 = 240; // 4 minutes in epoch (4*60)
-$bus17Route = 1500; // 25 minutes in epoch (20*60)
-$walkDistanceBus17 = 420; // 10 minutes in epoch (15*60)
+$walkTimeBus17 = 150; // 2.5 minutes in epoch (4*60)
+$bus17Route = 1080; // 17 minutes in epoch (20*60)
+$walkDistanceBus17 = 480; // 10 minutes in epoch (15*60)
 
-$walkTimeBus153 = 600; // 10 minutes in epoch (15*60)
+$walkTimeBus153 = 360; // 6 minutes in epoch (15*60)
 $bus153Route = 960; // 15 minutes in epoch (15*60)
 $walkDistanceBus153 = 480; // 10 minutes in epoch (15*60)
 
-$walkTimeBus91 = 240; // 10 minutes in epoch (15*60)
+$walkTimeBus91 = 360; // 6 minutes in epoch (15*60)
 $bus91Route = 1200; // 15 minutes in epoch (15*60)
 $walkDistanceBus91 = 1200; // 10 minutes in epoch (15*60)
 
-$walkDistanceTube1 = 600; // 10 minutes in epoch
-$tubeRoute = 1800; // 30 minutes in epoch (30*60)
-$walkDistanceTube2 = 600; // 10 minutes in epoch
+$walkDistanceTube1 = 240; // 4 minutes in epoch
+$tubeRoute = 960; // 20 minutes in epoch (30*60)
+$walkDistanceTube2 = 480; // 10 minutes in epoch
 $tubeTime = $walkDistanceTube1+$tubeRoute+$walkDistanceTube2;
 
 //******************************************************************************
@@ -115,6 +115,22 @@ $predictions91[0][1] = $predictions91[0][1] / 1000;
 $predictions91[0][2] = $predictions91[0][2] / 1000;
 $predictions91[0][3] = $predictions91[0][3] / 1000;
 $predictions91[0][4] = $predictions91[0][4] / 1000;
+
+//******************************************************************************
+// making these times readable
+//******************************************************************************
+
+$tflArrival17_1 = (($predictions17[0][1]-$currentDateEpochms)/60);settype($tflArrival17_1, "integer");
+$tflArrival17_2 = (($predictions17[0][2]-$currentDateEpochms)/60);settype($tflArrival17_2, "integer");
+$tflArrival17_3 = (($predictions17[0][3]-$currentDateEpochms)/60);settype($tflArrival17_3, "integer");
+
+$tflArrival153_1 = (($predictions153[0][1]-$currentDateEpochms)/60);settype($tflArrival153_1, "integer");
+$tflArrival153_2 = (($predictions153[0][2]-$currentDateEpochms)/60);settype($tflArrival153_2, "integer");
+$tflArrival153_3 = (($predictions153[0][3]-$currentDateEpochms)/60);settype($tflArrival153_3, "integer");
+
+$tflArrival91_1 = (($predictions91[0][1]-$currentDateEpochms)/60);settype($tflArrival91_1, "integer");
+$tflArrival91_2 = (($predictions91[0][2]-$currentDateEpochms)/60);settype($tflArrival91_2, "integer");
+$tflArrival91_3 = (($predictions91[0][3]-$currentDateEpochms)/60);settype($tflArrival91_3, "integer");
 
 //******************************************************************************
 // getting only Arrival Times bigger than current time + walktime
@@ -271,6 +287,8 @@ else {
 
 }
 
+$saferArrival17 = (($bus17EarliestArrivalTime-$currentDateEpochms)/60);settype($saferArrival17, "integer");
+
 // BUS 153
 
 if (!($prediction153_valid1=="0"))
@@ -292,6 +310,8 @@ else {
 
 }
 
+$saferArrival153 = (($bus153EarliestArrivalTime-$currentDateEpochms)/60);settype($saferArrival153, "integer");
+
 // BUS 91
 
 if (!($prediction91_valid1=="0"))
@@ -312,6 +332,8 @@ else {
 			$bus91EarliestArrivalTime = $prediction91_valid4;
 
 }
+
+$saferArrival91 = (($bus91EarliestArrivalTime-$currentDateEpochms)/60);settype($saferArrival91, "integer");
 
 //******************************************************************************
 // defining Office Arrival Time
@@ -359,8 +381,6 @@ if (
 	($bus153OfficeArrivalTime < $bus17OfficeArrivalTime)
 	&&
 	($bus153OfficeArrivalTime < $bus91OfficeArrivalTime)
-	&&
-	($bus153OfficeArrivalTime < $tubeOfficeArrivalTime)
 	)
 {
 //			echo "153";
@@ -375,8 +395,6 @@ elseif (
 	($bus17OfficeArrivalTime < $bus153OfficeArrivalTime)
 	&&
 	($bus17OfficeArrivalTime < $bus91OfficeArrivalTime)
-	&&
-	($bus17OfficeArrivalTime < $tubeOfficeArrivalTime)
 	)
 {
 //			echo "17";
@@ -391,28 +409,12 @@ elseif (
 	($bus91OfficeArrivalTime < $bus17OfficeArrivalTime)
 	&&
 	($bus91OfficeArrivalTime < $bus153OfficeArrivalTime)
-	&&
-	($bus91OfficeArrivalTime < $tubeOfficeArrivalTime)
 	)
 {
 //			echo "91";
 	     	$bestChoice = "Bus 91";
 	     	$officeArrivalTime = date("H:i:s", $bus91OfficeArrivalTime);
 	     	$routeTime = $bus91OfficeArrivalTime;
-}
-
-elseif (
-	($tubeOfficeArrivalTime < $bus17OfficeArrivalTime)
-	&&
-	($tubeOfficeArrivalTime < $bus153OfficeArrivalTime)
-	&&
-	($tubeOfficeArrivalTime < $bus91OfficeArrivalTime)
-	)
-{
-//			echo "Tube";
-			$bestChoice = "TUBE";
-			$officeArrivalTime = date("H:i:s", ($currentDateEpoch+$tubeRoute));
-	     	$routeTime = $tubeRoute/60;
 }
 
 else {
@@ -478,39 +480,19 @@ $routeMinTube = $tubeTime/60;
 	     	settype($routeMinTube, "integer");
 
 
-if ($bestChoice == "TUBE")
-{
-	     	$nextBusWhenMin = "NOTSURE";
-	     	$routeMin = $tubeTime/60;
-	     	settype($routeMin, "integer");
-}
-
-else {
-	     	$nextBusWhen = $bus17EarliestArrivalTime-$currentDateEpoch;
-	     	$nextBusWhenMin = $nextBusWhen/60;
-	     	settype($nextBusWhenMin, "integer");
+$nextBusWhen = $bus17EarliestArrivalTime-$currentDateEpoch;
+$nextBusWhenMin = $nextBusWhen/60;
+settype($nextBusWhenMin, "integer");
 
 
-	     	$routeEpoch = $routeTime-$currentDateEpochms;
-	     	$routeMin = $routeEpoch/60;
-	     	settype($routeMin, "integer");
+$routeEpoch = $routeTime-$currentDateEpochms;
+$routeMin = $routeEpoch/60;
+settype($routeMin, "integer");
 
-}
+// COPY
 
-// BUS or TUBE copy
-
-if ($bestChoice == "TUBE")
-{
-			$bestChoiceCopy = "No luck today, better getting the tube!";
-			$waitTimeCopy = "No luck today, better getting the tube!";
-			$journeyTimeCopy = "The journey takes ".$routeMin." minutes in average so you should arrive in the office at ".$officeArrivalTime.".";
-}
-
-else {
-			$bestChoiceCopy = "The best Choice is ".$bestChoice.", it will arrive in ".$nextBusWhenMin." minutes (".date("H:i:s", $nextBus).")";
-			$walkAndWaitCopy = "You usually take ".$walkTime." minutes to arrive in the bus stop, so you will have to wait ".$waitTime." minutes for the bus";
+			$bestChoiceCopy = "Best choice is ".$bestChoice.". Wait time is ".$waitTime." minutes.";
 			$journeyTimeCopy = "The journey will takes ".$routeMin." minutes so you should arrive in the office at ".$officeArrivalTime.".";
-}
 
 ?>
 
